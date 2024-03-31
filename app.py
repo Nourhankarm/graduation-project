@@ -54,7 +54,7 @@ def get_detections():
         print(f"data received: gender= {data['gender']}, age= {age}, hypertension= {hypertension}, smoking_history= {data['smoking_history']}, bni= {bni}, HbA1c_level= {HbA1c_level}, blood_glucose_level= {blood_glucose_level}")
 
         # Prepare the model input by replacing 'gender' and 'smoking_history' with their encoded forms
-        model_input = np.array([[encoded_gender, age, hypertension, encoded_smoking_history, bni, HbA1c_level, blood_glucose_level]])
+        model_input = np.array([[encoded_gender, age, hypertension, heart_disease, encoded_smoking_history, bni, HbA1c_level, blood_glucose_level]])
 
         # Make prediction
         prediction = model.predict(model_input)
