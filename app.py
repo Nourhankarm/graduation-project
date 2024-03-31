@@ -41,11 +41,11 @@ def get_detections():
         encoded_smoking_history = encoder.transform([smoking_history])[0]
         print(encoded_smoking_history)
         if(gender=="Male"):
-            gender = 1
+            encoded_gender=1
         elif (gender=="Female"):
-            gender = 0
+            encoded_gender=0
         else:
-            gender = 2
+            encoded_gender=2
         
         
 
@@ -70,8 +70,6 @@ if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=5000)
 
 
-
-# In[ ]:
 
 
 
