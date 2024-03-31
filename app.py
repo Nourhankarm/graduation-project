@@ -1,14 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[3]:
-
-
-get_ipython().system('pip install flask --upgrade')
-
-
-# In[ ]:
-
 
 from absl import app, logging
 import numpy as np
