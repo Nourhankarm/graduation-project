@@ -40,7 +40,12 @@ def get_detections():
         print(encoder.classes_)
         encoded_smoking_history = encoder.transform([smoking_history])[0]
         print(encoded_smoking_history)
-        encoded_gender = encoder.transform([gender])[0]
+        if(gender=="Male"):
+            gender = 1
+        elif (gender=="Female"):
+            gender = 0
+        else:
+            gender = 2
         
         
 
