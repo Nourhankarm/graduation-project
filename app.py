@@ -31,6 +31,7 @@ def get_detections():
         gender = data['gender']
         age = data['age']
         hypertension = data['hypertension']
+        heart_disease =data['heart_disease']
         smoking_history = data['smoking_history']
         bni = data['bni']
         HbA1c_level = data['HbA1c_level']
