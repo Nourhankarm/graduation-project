@@ -28,7 +28,7 @@ def home():
 # API endpoint for predictions
 @app.route('/predict', methods=['POST'])
 def get_detections():
-    def predict():
+
     data = request.json
     print(data["gender"])
     features = [data['gender'], data['age'], data['hypertension'], data['heart_disease'],
