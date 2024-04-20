@@ -29,7 +29,7 @@ def home():
 @app.route('/predict', methods=['POST'])
 def get_detections():
     def predict():
-    data = request.get_json
+    data = request.json
     print(data["gender"])
     features = [data['gender'], data['age'], data['hypertension'], data['heart_disease'],
                 data['smoking_history'], data['bmi'], data['HbA1c_level'], data['blood_glucose_level']]
