@@ -33,7 +33,7 @@ def get_detections():
         hypertension = data['hypertension']
         heart_disease =data['heart_disease']
         smoking_history = data['smoking_history']
-        bni = data['bni']
+        bmi = data['bmi']
         HbA1c_level = data['HbA1c_level']
         blood_glucose_level = data['blood_glucose_level'] 
         print(f"data received: gender= {data['gender']}, age= {age}, hypertension= {hypertension}, smoking_history= {data['smoking_history']}, bni= {bni}, HbA1c_level= {HbA1c_level}, blood_glucose_level= {blood_glucose_level}")
