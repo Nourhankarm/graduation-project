@@ -35,8 +35,8 @@ def get_detections():
         ]
 
         # Perform preprocessing on categorical features
-       gender = data['gender']
-       smoking_history = data['smoking_history']
+       encoded_gender  = data['gender']
+       encoded_smoking_history = data['smoking_history']
        encoded_gender = 1 if gender == "Male" else 0 if gender == "Female" else 2
 
  encoded_smoking_history = 0
