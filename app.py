@@ -39,18 +39,9 @@ def get_detections():
         smoking_history = data['smoking_history']
         encoded_gender = 1 if gender == "Male" else 0 if gender == "Female" else 2
         
-        encoded_smoking_history = 0
-        if smoking_history == "never":
-            encoded_smoking_history = 0
-        elif smoking_history == "ever":
-            encoded_smoking_history = 1
-        elif smoking_history == "current":
-            encoded_smoking_history = 2
-        elif smoking_history == "not current":
-            encoded_smoking_history = 3
-        else:
-            encoded_smoking_history = 4
+        encoded_smoking_history = 0 if smoking_history == "never" else 4 if smoking_history == "ever" else 2 if smoking_history == "current" else 5 if smoking_history == "not current" else 3 if smoking_history == "former" else 1 if smoking_history =="No Info"
 
+      
         # Prepare model input
         model_input = np.array([[
             encoded_gender,
