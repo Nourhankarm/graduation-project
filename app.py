@@ -23,5 +23,6 @@ def predict():
     prediction = rf.predict([features])
     return jsonify({'diabetes_prediction': int(prediction[0])})
 
-if _name_ == '_main_':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+
+if __name__ == '__main__':
+    app.run(debug=False, host='0.0.0.0', port=5000)
