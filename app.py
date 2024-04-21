@@ -67,5 +67,5 @@ def get_detections():
         abort(404)
 
 
-if _name_ == '_main_':
+if __name__ == '_main_':
     app.run(debug=False, host='0.0.0.0', port=5000)
