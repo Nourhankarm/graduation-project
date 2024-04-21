@@ -41,16 +41,14 @@ def get_detections():
         
         encoded_smoking_history = 0
         if smoking_history == "never":
-            encoded_smoking_history = 0
-        elif smoking_history == "ever":
             encoded_smoking_history = 1
-        elif smoking_history == "current":
+        elif smoking_history == "ever":
             encoded_smoking_history = 2
-        elif smoking_history == "not current":
+        elif smoking_history == "current":
             encoded_smoking_history = 3
-        elif smoking_history == "former":
-            encoded_smoking_history = 4  
-        else:
+        elif smoking_history == "not current":
+            encoded_smoking_history = 4
+       else:
             encoded_smoking_history = 5
 
         # Prepare model input
