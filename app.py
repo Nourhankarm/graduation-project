@@ -48,8 +48,10 @@ def get_detections():
             encoded_smoking_history = 2
         elif smoking_history == "not current":
             encoded_smoking_history = 3
+        elif smoking_history == "former":
+            encoded_smoking_history = 4  
         else:
-            encoded_smoking_history = 4
+            encoded_smoking_history = 5
 
         # Prepare model input
         model_input = np.array([[
