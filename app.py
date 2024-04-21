@@ -35,24 +35,23 @@ def get_detections():
         ]
 
         # Perform preprocessing on categorical features
-        gender = data['gender']
-        smoking_history = data['smoking_history']
-        encoded_gender = 1 if gender == "Male" else 0 if gender == "Female" else 2
-        
-        encoded_smoking_history = 0
-        if smoking_history == "never":
-            encoded_smoking_history = 0
-        elif smoking_history == "ever":
-            encoded_smoking_history = 1
-        elif smoking_history == "current":
-            encoded_smoking_history = 2
-        elif smoking_history == "not current":
-            encoded_smoking_history = 3
-        elif smoking_history == "No Info":
-            encoded_smoking_history = 4
-        else:
-            encoded_smoking_history = 5
+       gender = data['gender']
+       smoking_history = data['smoking_history']
+       encoded_gender = 1 if gender == "Male" else 0 if gender == "Female" else 2
 
+ encoded_smoking_history = 0
+if smoking_history == "never":
+    encoded_smoking_history = 0
+elif smoking_history == "ever":
+    encoded_smoking_history = 1
+elif smoking_history == "current":
+    encoded_smoking_history = 2
+elif smoking_history == "not current":
+    encoded_smoking_history = 3
+elif smoking_history == "No Info":
+    encoded_smoking_history = 4
+else:
+    encoded_smoking_history = 5
         # Prepare model input
         model_input = np.array([[
             encoded_gender,
