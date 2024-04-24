@@ -1,45 +1,71 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+
 from absl import app, logging
 import numpy as np
 import pickle
+
 from flask import Flask, request, jsonify, abort
-from sklearn.preprocessing import LabelEncoder
+import os
 
 # Initialize Flask application
-app = Flask(__name__)
+app = Flask(_name_)
 
-# Load encoder
-with open('encoder.sav', 'rb') as file:
-    encoder = pickle.load(file)
-
-# Load model
-with open('diabetes_model.sav', 'rb') as file:
+# Load the model from a pickle file
+model_file_path = 'diabetes_model.sav'
+with open(model_file_path, 'rb') as file:
     model = pickle.load(file)
+
+# Correct the syntax error in the path and load the encoder
+encoder_file_path = 'encoder.sav'  # Corrected path
+with open(encoder_file_path, 'rb') as file:
+    encoder = pickle.load(file)
 
 # API endpoint for predictions
 @app.route('/predict', methods=['POST'])
 def get_detections():
     try:
-        # Validate incoming JSON data
         data = request.json
-        if not all(key in data for key in ['gender', 'age', 'hypertension', 'heart_disease', 'smoking_history', 'bmi', 'HbA1c_level', 'blood_glucose_level']):
-            abort(400)
+        print(data)
+        gender = data['gender']
+        age = data['age']
+        hypertension = data['hypertension']
+        heart_disease =data['heart_disease']
+        smoking_history = data['smoking_history']
+        bmi = data['bmi']
+        HbA1c_level = data['HbA1c_level']
+        blood_glucose_level = data['blood_glucose_level'] 
+        print(f"data received: gender= {data['gender']}, age= {age}, hypertension= {hypertension}, heart_disease= {heart_disease}, smoking_history= {data['smoking_history']}, bmi= {bmi}, HbA1c_level= {HbA1c_level}, blood_glucose_level= {blood_glucose_level}")
+        #  'gender' and 'smoking_history' are categorical and need to be encoded
+        print(encoder.classes_)
+        encoded_smoking_history = encoder.transform([smoking_history])[0]
+        print(encoded_smoking_history)
+        if(gender=="Male"):
+            encoded_gender=1
+        elif (gender=="Female"):
+            encoded_gender=0
+        else:
+            encoded_gender=2
+        
+        
 
-        # Encoding categorical variables
-        gender_encoded = encoder.transform([data['gender']])[0]
-        smoking_history_encoded = encoder.transform([data['smoking_history']])[0]
+        # Log received data
+        print(f"data received: gender= {data['gender']}, age= {age}, hypertension= {hypertension}, heart_disease={heart_disease}, smoking_history= {data['smoking_history']}, bmi= {bmi}, HbA1c_level= {HbA1c_level}, blood_glucose_level= {blood_glucose_level}")
 
-        # Prepare model input
-        model_input = np.array([[gender_encoded, data['age'], data['hypertension'], data['heart_disease'], smoking_history_encoded, data['bmi'], data['HbA1c_level'], data['blood_glucose_level']]])
+        # Prepare the model input by replacing 'gender' and 'smoking_history' with their encoded forms
+        model_input = np.array([[encoded_gender, age, hypertension, heart_disease, encoded_smoking_history, bmi, HbA1c_level, blood_glucose_level]])
 
         # Make prediction
         prediction = model.predict(model_input)
 
-        # Return prediction
+        # Log and return the prediction
+        print(f"prediction: {prediction}")
         return jsonify({"prediction": int(prediction[0])})
 
-    except Exception as e:
-        app.logger.error(f"An error occurred: {str(e)}")
-        abort(500)
+    except FileNotFoundError:
+        abort(404)
 
-if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=5000)
+
+if _name_ == '_main_':
+    app.run(debug=False, host='0.0.0.0', port=5000)
