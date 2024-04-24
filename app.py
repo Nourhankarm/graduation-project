@@ -6,7 +6,7 @@ app = Flask(__name__)
 # Load your trained model (make sure the path is accessible from your Jupyter Notebook)
 #model = pickle.load(open('rf.pkl', 'rb'))
 # Load the model from a pickle file
-model_file_path = 'model.sav'
+model_file_path = 'diabetes_model.sav'
 with open(model_file_path, 'rb') as file:
     model = pickle.load(file)
 
