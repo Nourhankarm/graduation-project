@@ -7,16 +7,17 @@ import os
 
 # Initialize Flask application
 app = Flask(__name__)
+# Correct the syntax error in the path and load the encoder
+encoder_file_path = 'encoder.sav'  # Corrected path
+with open(encoder_file_path, 'rb') as file:
+    encoder = pickle.load(file)
 
 # Load the model from a pickle file
 model_file_path = 'rf.sav'
 with open(model_file_path, 'rb') as file:
     model = pickle.load(file)
 
-# Correct the syntax error in the path and load the encoder
-encoder_file_path = 'encoder.sav'  # Corrected path
-with open(encoder_file_path, 'rb') as file:
-    encoder = pickle.load(file)
+
 
 # API endpoint for predictions
 @app.route('/predict', methods=['POST'])
