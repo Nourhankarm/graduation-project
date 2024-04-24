@@ -9,14 +9,15 @@ import os
 app = Flask(__name__)
 
 # Load the model from a pickle file
-model_file_path = 'model.sav'
-with open(model_file_path, 'rb') as file:
-    model = pickle.load(file)
+#model_file_path = 'model.sav'
+#with open(model_file_path, 'rb') as file:
+#   model = pickle.load(file)
 
 # Load the encoder
-encoder_file_path = 'encoder.sav'
-with open(encoder_file_path, 'rb') as file:
-    encoder = pickle.load(file)
+#encoder_file_path = 'encoder.sav'
+#with open(encoder_file_path, 'rb') as file:
+#    encoder = pickle.load(file)
+model = pickle.load(open('model.pkl', 'rb'))
 
 # API endpoint for predictions
 @app.route('/predict', methods=['POST'])
