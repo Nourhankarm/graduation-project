@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 import pickle
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 # Load your trained model (make sure the path is accessible from your Jupyter Notebook)
 #model = pickle.load(open('model.sav', 'rb'))
@@ -24,5 +24,5 @@ def predict():
     return jsonify({'diabetes_prediction': int(prediction[0])})
 
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=5000)
