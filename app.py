@@ -8,14 +8,7 @@ import os
 # Initialize Flask application
 app = Flask(__name__)
 # Correct the syntax error in the path and load the encoder
-encoder_file_path = 'encoder.sav'  # Corrected path
-with open(encoder_file_path, 'rb') as file:
-    encoder = pickle.load(file)
 
-# Load the model from a pickle file
-model_file_path = 'rf.sav'
-with open(model_file_path, 'rb') as file:
-    model = pickle.load(file)
 
 
 
@@ -46,7 +39,14 @@ def get_detections():
         else:
             encoded_gender=2
         
-        
+encoder_file_path = 'encoder.sav'  # Corrected path
+with open(encoder_file_path, 'rb') as file:
+    encoder = pickle.load(file)
+
+# Load the model from a pickle file
+model_file_path = 'rf.sav'
+with open(model_file_path, 'rb') as file:
+    model = pickle.load(file)        
 
         # Log received data
         print(f"data received: gender= {data['gender']}, age= {age}, hypertension= {hypertension}, heart_disease={heart_disease}, smoking_history= {data['smoking_history']}, bmi= {bmi}, HbA1c_level= {HbA1c_level}, blood_glucose_level= {blood_glucose_level}")
