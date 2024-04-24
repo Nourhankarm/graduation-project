@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 import pickle
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 # Load your trained model (make sure the path is accessible from your Jupyter Notebook)
 #model = pickle.load(open('rf.pkl', 'rb'))
