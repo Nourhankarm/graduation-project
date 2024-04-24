@@ -10,7 +10,7 @@ from flask import Flask, request, jsonify, abort
 import os
 
 # Initialize Flask application
-app = Flask(_name_)
+app = Flask(__name__)
 
 # Load the model from a pickle file
 model_file_path = 'diabetes_model.sav'
