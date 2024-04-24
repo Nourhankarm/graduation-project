@@ -31,7 +31,8 @@ def get_detections():
         smoking_history = data['smoking_history']
         bmi = data['bmi']
         HbA1c_level = data['HbA1c_level']
-        blood_glucose_level = data['blood_glucose_level'] 
+        blood_glucose_level = data['blood_glucose_level']
+        diabetes = data['diabetes']
         print(f"data received: gender= {data['gender']}, age= {age}, hypertension= {hypertension}, heart_disease= {heart_disease}, smoking_history= {data['smoking_history']}, bmi= {bmi}, HbA1c_level= {HbA1c_level}, blood_glucose_level= {blood_glucose_level}")
         #  'gender' and 'smoking_history' are categorical and need to be encoded
         print(encoder.classes_)
