@@ -7,10 +7,16 @@ import os
 
 # Initialize Flask application
 app = Flask(__name__)
-# Correct the syntax error in the path and load the encoder
 
+# Load the model from a pickle file
+model_file_path = 'rf.sav'
+with open(model_file_path, 'rb') as file:
+    model = pickle.load(file)
 
-
+# Load the encoder
+encoder_file_path = 'encoder.sav'
+with open(encoder_file_path, 'rb') as file:
+    encoder = pickle.load(file)
 
 # API endpoint for predictions
 @app.route('/predict', methods=['POST'])
@@ -32,22 +38,12 @@ def get_detections():
         print(encoder.classes_)
         encoded_smoking_history = encoder.transform([smoking_history])[0]
         print(encoded_smoking_history)
-        if(gender=="Male"):
-            encoded_gender=1
-        elif (gender=="Female"):
-            encoded_gender=0
+        if gender == "Male":
+            encoded_gender = 1
+        elif gender == "Female":
+            encoded_gender = 0
         else:
-            encoded_gender=2
-
-
-# Load the model from a pickle file
-model_file_path = 'rf.sav'
-with open(model_file_path, 'rb') as file:
-    model = pickle.load(file)   
-
-encoder_file_path = 'encoder.sav'  # Corrected path
-with open(encoder_file_path, 'rb') as file:
-    encoder = pickle.load(file)    
+            encoded_gender = 2
 
         # Log received data
         print(f"data received: gender= {data['gender']}, age= {age}, hypertension= {hypertension}, heart_disease={heart_disease}, smoking_history= {data['smoking_history']}, bmi= {bmi}, HbA1c_level= {HbA1c_level}, blood_glucose_level= {blood_glucose_level}")
