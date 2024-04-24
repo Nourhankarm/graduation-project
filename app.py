@@ -9,7 +9,7 @@ import os
 app = Flask(__name__)
 
 # Load the model from a pickle file
-model_file_path = 'diabetes_model.sav'
+model_file_path = 'rf.sav'
 with open(model_file_path, 'rb') as file:
     model = pickle.load(file)
 
@@ -32,7 +32,7 @@ def get_detections():
         bmi = data['bmi']
         HbA1c_level = data['HbA1c_level']
         blood_glucose_level = data['blood_glucose_level']
-        diabetes = data['diabetes']
+
         print(f"data received: gender= {data['gender']}, age= {age}, hypertension= {hypertension}, heart_disease= {heart_disease}, smoking_history= {data['smoking_history']}, bmi= {bmi}, HbA1c_level= {HbA1c_level}, blood_glucose_level= {blood_glucose_level}")
         #  'gender' and 'smoking_history' are categorical and need to be encoded
         print(encoder.classes_)
