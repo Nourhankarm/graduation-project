@@ -9,7 +9,7 @@ import os
 app = Flask(__name__)
 
 # Load the model from a pickle file
-model_file_path = 'rf.sav'
+model_file_path = 'model.sav'
 with open(model_file_path, 'rb') as file:
     model = pickle.load(file)
 
