@@ -1,13 +1,12 @@
-from absl import app, logging
+from flask import Flask, request, jsonify, abort
 import numpy as np
 import pickle
-
-from flask import Flask, request, jsonify, abort
 import os
 
 # Initialize Flask application
-app = Flask(_name_)
+app = Flask(__name__)  # Use double underscores around name
 
+# Load your trained model and encoder
 model = pickle.load(open('lr.pkl', 'rb'))
 encoder = pickle.load(open('encoder.sav', 'rb'))
 
@@ -16,44 +15,40 @@ encoder = pickle.load(open('encoder.sav', 'rb'))
 def get_detections():
     try:
         data = request.json
-        print(data)
-        gender = data['gender']
-        age = data['age']
-        hypertension = data['hypertension']
-        heart_disease = data['heart_disease']
-        smoking_history = data['smoking_history']
-        bmi = data['bmi']
-        HbA1c_level = data['HbA1c_level']
-        blood_glucose_level = data['blood_glucose_level']
+        if not data:
+            abort(400, description="No data provided")
 
-        print(f"data received: gender= {data['gender']}, age= {age}, hypertension= {hypertension}, heart_disease= {heart_disease}, smoking_history= {data['smoking_history']}, bmi= {bmi}, HbA1c_level= {HbA1c_level}, blood_glucose_level= {blood_glucose_level}")
-        #  'gender' and 'smoking_history' are categorical and need to be encoded
-        print(encoder.classes_)
+        # Log incoming data
+        print(f"Data received: {data}")
+
+        # Extract features from request
+        gender = data.get('gender')
+        age = data.get('age')
+        hypertension = data.get('hypertension')
+        heart_disease = data.get('heart_disease')
+        smoking_history = data.get('smoking_history')
+        bmi = data.get('bmi')
+        HbA1c_level = data.get('HbA1c_level')
+        blood_glucose_level = data.get('blood_glucose_level')
+
+        # Encode categorical data
         encoded_smoking_history = encoder.transform([smoking_history])[0]
-        print(encoded_smoking_history)
-        if gender == "Male":
-            encoded_gender = 1
-        elif gender == "Female":
-            encoded_gender = 0
-        else:
-            encoded_gender = 2
+        encoded_gender = {'Male': 1, 'Female': 0}.get(gender, 2)  # Default to 2 for other genders
 
-        # Log received data
-        print(f"data received: gender= {data['gender']}, age= {age}, hypertension= {hypertension}, heart_disease={heart_disease}, smoking_history= {data['smoking_history']}, bmi= {bmi}, HbA1c_level= {HbA1c_level}, blood_glucose_level= {blood_glucose_level}")
-
-        # Prepare the model input by replacing 'gender' and 'smoking_history' with their encoded forms
+        # Prepare the model input
         model_input = np.array([[encoded_gender, age, hypertension, heart_disease, encoded_smoking_history, bmi, HbA1c_level, blood_glucose_level]])
 
         # Make prediction
         prediction = model.predict(model_input)
 
-        # Log and return the prediction
-        print(f"prediction: {prediction}")
+        # Return the prediction
         return jsonify({"prediction": int(prediction[0])})
 
-    except FileNotFoundError:
-        abort(404)
+    except Exception as e:
+        # Log and handle any other errors
+        print(f"An error occurred: {e}")
+        abort(500, description=str(e))
 
-
-if _name_ == '_main_':
+# Check if the script is run directly and not imported
+if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=5000)
