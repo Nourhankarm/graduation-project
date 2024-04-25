@@ -10,13 +10,19 @@ app = Flask(__name__)
 
 # It's better to load models in a function or under if __name__ == '__main__' to avoid issues with unneeded executions during imports
 
+
 @app.before_first_request
 def load_model_data():
-    # Load the model and encoder from files
+    model_path = 'decision_tree_model.pkl'
+    encoder_path = 'encoder.sav'
     try:
         global model, encoder
-        model = pickle.load(open('decision_tree_model.pkl', 'rb'))
-        encoder = pickle.load(open('encoder.sav', 'rb'))
+        model = pickle.load(open(model_path, 'rb'))
+        encoder = pickle.load(open(encoder_path, 'rb'))
+        app.logger.info("Model and encoder loaded successfully.")
+    except FileNotFoundError:
+        app.logger.error(f"File not found. Model path: {model_path}, Encoder path: {encoder_path}")
+        abort(500, description="Model loading failed: File not found")
     except Exception as e:
         app.logger.error(f"Failed to load model or encoder: {e}")
         abort(500, description="Model loading failed")
