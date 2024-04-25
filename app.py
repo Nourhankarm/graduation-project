@@ -13,6 +13,9 @@ app = Flask(__name__)
 
 @app.before_first_request
 def load_model_data():
+def load_model_data():
+    app.logger.info(f"Current directory: {os.getcwd()}")
+    app.logger.info(f"Directory contents: {os.listdir('.')}")
     model_path = 'decision_tree_model.pkl'
     encoder_path = 'encoder.sav'
     try:
@@ -20,7 +23,7 @@ def load_model_data():
         model = pickle.load(open(model_path, 'rb'))
         encoder = pickle.load(open(encoder_path, 'rb'))
         app.logger.info("Model and encoder loaded successfully.")
-    except FileNotFoundError:
+    except FileNotFoundError as e:
         app.logger.error(f"File not found. Model path: {model_path}, Encoder path: {encoder_path}")
         abort(500, description="Model loading failed: File not found")
     except Exception as e:
