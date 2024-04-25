@@ -6,63 +6,51 @@ from flask import Flask, request, jsonify, abort
 import os
 
 # Initialize Flask application
-app = Flask(_name_)
+app = Flask(__name__)
 
-# Load the model from a pickle file
-#model_file_path = 'model.sav'
-#with open(model_file_path, 'rb') as file:
-#   model = pickle.load(file)
+# It's better to load models in a function or under if __name__ == '__main__' to avoid issues with unneeded executions during imports
 
-# Load the encoder
-#encoder_file_path = 'encoder.sav'
-#with open(encoder_file_path, 'rb') as file:
-#    encoder = pickle.load(file)
-model = pickle.load(open('decision_tree_model.pkl', 'rb'))
-encoder = pickle.load(open('encoder.sav', 'rb'))
+@app.before_first_request
+def load_model_data():
+    # Load the model and encoder from files
+    try:
+        global model, encoder
+        model = pickle.load(open('decision_tree_model.pkl', 'rb'))
+        encoder = pickle.load(open('encoder.sav', 'rb'))
+    except Exception as e:
+        app.logger.error(f"Failed to load model or encoder: {e}")
+        abort(500, description="Model loading failed")
 
 # API endpoint for predictions
 @app.route('/predict', methods=['POST'])
 def get_detections():
     try:
         data = request.json
-        print(data)
-        gender = data['gender']
-        age = data['age']
-        hypertension = data['hypertension']
-        heart_disease = data['heart_disease']
-        smoking_history = data['smoking_history']
-        bmi = data['bmi']
-        HbA1c_level = data['HbA1c_level']
-        blood_glucose_level = data['blood_glucose_level']
+        if not data:
+            abort(400, description="No data provided")
 
-        print(f"data received: gender= {data['gender']}, age= {age}, hypertension= {hypertension}, heart_disease= {heart_disease}, smoking_history= {data['smoking_history']}, bmi= {bmi}, HbA1c_level= {HbA1c_level}, blood_glucose_level= {blood_glucose_level}")
-        #  'gender' and 'smoking_history' are categorical and need to be encoded
-        print(encoder.classes_)
-        encoded_smoking_history = encoder.transform([smoking_history])[0]
-        print(encoded_smoking_history)
-        if gender == "Male":
-            encoded_gender = 1
-        elif gender == "Female":
-            encoded_gender = 0
-        else:
-            encoded_gender = 2
+        required_fields = ['gender', 'age', 'hypertension', 'heart_disease', 'smoking_history', 'bmi', 'HbA1c_level', 'blood_glucose_level']
+        if not all(field in data for field in required_fields):
+            abort(400, description="Missing data fields")
 
-        # Log received data
-        print(f"data received: gender= {data['gender']}, age= {age}, hypertension= {hypertension}, heart_disease={heart_disease}, smoking_history= {data['smoking_history']}, bmi= {bmi}, HbA1c_level= {HbA1c_level}, blood_glucose_level= {blood_glucose_level}")
+        # Encoding categorical data
+        try:
+            encoded_smoking_history = encoder.transform([data['smoking_history']])[0]
+            encoded_gender = {'Male': 1, 'Female': 0}.get(data['gender'], 2)
+        except ValueError as e:
+            app.logger.error(f"Encoding failed: {e}")
+            abort(400, description="Invalid data for encoding")
 
-        # Prepare the model input by replacing 'gender' and 'smoking_history' with their encoded forms
-        model_input = np.array([[encoded_gender, age, hypertension, heart_disease, encoded_smoking_history, bmi, HbA1c_level, blood_glucose_level]])
+        # Prepare the model input
+        model_input = np.array([[encoded_gender, data['age'], data['hypertension'], data['heart_disease'], encoded_smoking_history, data['bmi'], data['HbA1c_level'], data['blood_glucose_level']]])
 
         # Make prediction
         prediction = model.predict(model_input)
-
-        # Log and return the prediction
-        print(f"prediction: {prediction}")
         return jsonify({"prediction": int(prediction[0])})
 
-    except FileNotFoundError:
-        abort(404)
+    except Exception as e:
+        app.logger.error(f"Error during prediction: {e}")
+        abort(500, description="Prediction failed")
 
-
-if _name_ == '_main_':
+if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=5000)
