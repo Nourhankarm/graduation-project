@@ -4,9 +4,9 @@ import pickle
 app = Flask(__name__)  # Corrected from _name_ to __name__
 
 # Load your trained model (make sure the path is accessible from your Jupyter Notebook)
-#model = pickle.load(open('rf.pkl', 'rb'))
+#model = pickle.load(open('decision_tree_model.pkl', 'rb'))
 # Load the model from a pickle file
-model_file_path = 'model.sav'
+model_file_path = 'decision_tree_model.pkl'
 with open(model_file_path, 'rb') as file:
     model = pickle.load(file)
 
