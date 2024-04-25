@@ -13,7 +13,6 @@ app = Flask(__name__)
 
 @app.before_first_request
 def load_model_data():
-def load_model_data():
     app.logger.info(f"Current directory: {os.getcwd()}")
     app.logger.info(f"Directory contents: {os.listdir('.')}")
     model_path = 'decision_tree_model.pkl'
