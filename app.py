@@ -61,4 +61,4 @@ def get_detections():
         abort(500, description="Prediction failed")
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=5000)werkzeug.exceptions.InternalServerError: 500
+    app.run(debug=False, host='0.0.0.0', port=5000)
